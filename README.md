@@ -4,5 +4,4 @@ File Manager System
 MySQL+Php+JavaScript+CSS
 已知Bug:移動檔案
 下版方向:
-匯入資料庫結構
-刪除多餘檔案
+修正移動檔案(upload)
