@@ -9,6 +9,7 @@ MySQL+Php+JavaScript+CSS
   改移動功能為選單方式
   MySQL優化(第一次)
 值得改進:
+  線上編輯、預覽
   設定主目錄
   安全性
   帳號密碼
