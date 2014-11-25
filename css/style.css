@@ -6,7 +6,6 @@ html, body {
     height: 100%;
     width: 100%;
     margin: auto;
-    /*border: dashed 2px gray;*/
     float: left;
 }
 #menu {
@@ -18,6 +17,7 @@ html, body {
 }
 #menu *, #file * {
     vertical-align: top;
+    text-align: left;
     cursor: default;
 }
 #menu div{

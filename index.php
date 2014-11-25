@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>程式設計比賽-第三題</title>
+		<title>檔案管理系統</title>
 
 		<link rel="stylesheet" type="text/css" href="css/contextmenu.css" /><!-- 右鍵選單樣式 -->
 		<link rel="stylesheet" type="text/css" href="css/style.css" /><!-- 主要樣式 -->
@@ -416,9 +416,9 @@
 	<body ondragover='cancelEvent(event);' ondrop='cancelEvent(event);'>
 		<div id="main" oncontextmenu='cancelEvent(event);'>
 			<div id="menu" oncontextmenu='cancelEvent(event);'>
-				<div onclick="displayList('')" oncontextmenu='cancelEvent(event);'>回主目錄</div>
-				<div onclick="addnewdir()" oncontextmenu='cancelEvent(event);'>新增資料夾</div>
-				<div onclick="$('#selectFile').click()" oncontextmenu='cancelEvent(event);'>上傳檔案</div>
+				<div onclick="displayList('')" oncontextmenu='cancelEvent(event);'><i class="fa fa-home"></i>回主目錄</div>
+				<div onclick="addnewdir()" oncontextmenu='cancelEvent(event);'><i class="fa fa-plus"></i>新增資料夾</div>
+				<div onclick="$('#selectFile').click()" oncontextmenu='cancelEvent(event);'><i class="fa fa-upload"></i>上傳檔案</div>
 				<!-- <div>+新增空白檔案</div> -->
 			</div>
 			<div id="file" ondragover='dragOverHandler(event)' ondrop='dropHandler(event)' oncontextmenu='cancelEvent(event);'></div>
@@ -432,9 +432,6 @@
 		</div>
 		<input id="selectFile" type="file" multiple="multiple" data-id="fileUpload" style="display:none"/>
 		<div id="Dialog"></div><!-- 使用者輸入 -->
-
-
-
 
 	</body>
 </html>
