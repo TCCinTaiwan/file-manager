@@ -1,0 +1,15 @@
+#contextmenu {
+    /*width:60px;   */
+    background: #FFFFFF;
+    border: solid 1px #000;
+    border-radius: 1px;
+    position: absolute;
+    left: 10px;
+    top: 20px;
+    visibility: hidden;
+}
+#contextmenu div {
+    text-align: center;
+    border: solid 1px #ccc;
+    cursor: default;
+}
