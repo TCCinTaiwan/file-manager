@@ -10,6 +10,7 @@ MySQL+Php+JavaScript+CSS
       MySQL優化(第一次)
     值得改進:
       多選
+      預覽
       UI還是太醜
       檔案資訊
       線上編輯、預覽
