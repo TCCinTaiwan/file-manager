@@ -273,7 +273,7 @@
 			            "確定": function () {
 							$(this).dialog('close');
 							var new_path=$('#DialogText').val();
-							if  ((path+name)!=newpath)
+							if  ((path+name)==new_path)
 							{
 								alert('不能移到自己');
 							} 
