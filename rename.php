@@ -46,32 +46,32 @@
 	{
 		//判斷假如結尾不是/自動加一個
 		$name.=((!preg_match('/\/$/', $name))?"/":"");
-		$sql = "UPDATE `file-manager`.`".$type."` SET `filename` = '".$name."' WHERE `".$type."`.`id` = ".$id.";";
+		$sql = "UPDATE `".$type."` SET `filename` = '".$name."' WHERE `".$type."`.`id` = ".$id.";";
 		mysql_query($sql);
-		//$sql = "SELECT FROM `file-manager`.`file` WHERE `file`.`path` = ".$path.$name.";";
+		//$sql = "SELECT FROM `file` WHERE `file`.`path` = ".$path.$name.";";
 		//這邊要把資料夾內的檔案所屬資料夾更改
 		
-		$sql = "SELECT * FROM `file-manager`.`file` WHERE `file`.`path` LIKE \"".$path.$oldname."%\";";
+		$sql = "SELECT * FROM `file` WHERE `file`.`path` LIKE \"".$path.$oldname."%\";";
 	    $result = mysql_query($sql) or die('MySQL query error');
 	    while($row = mysql_fetch_array($result)){
 	        
-	        $sql = "UPDATE `file-manager`.`file` SET `path` = '".str_replace($path.$oldname, $path.$name, $row['path'])."' WHERE `file`.`id` = '".$row['id']."';";
+	        $sql = "UPDATE `file` SET `path` = '".str_replace($path.$oldname, $path.$name, $row['path'])."' WHERE `file`.`id` = '".$row['id']."';";
 	        mysql_query($sql);
 	    }
 
-	    $sql = "SELECT * FROM `file-manager`.`dir` WHERE `dir`.`path` LIKE \"".$path.$oldname."%\";";
+	    $sql = "SELECT * FROM `dir` WHERE `dir`.`path` LIKE \"".$path.$oldname."%\";";
 	    $result = mysql_query($sql) or die('MySQL query error');
 	    while($row = mysql_fetch_array($result)){
-	        $sql = "UPDATE `file-manager`.`dir` SET `path` = '".str_replace($path.$oldname, $path.$name, $row['path'])."' WHERE `dir`.`id` = '".$row['id']."';";
+	        $sql = "UPDATE `dir` SET `path` = '".str_replace($path.$oldname, $path.$name, $row['path'])."' WHERE `dir`.`id` = '".$row['id']."';";
 	        mysql_query($sql);
 	    }
 
-		// $sql = "UPDATE `file-manager`.`dir` SET `path` = '".$path.$name."' WHERE `dir`.`path` = '".$path.$oldname."';";
+		// $sql = "UPDATE `dir` SET `path` = '".$path.$name."' WHERE `dir`.`path` = '".$path.$oldname."';";
 		// mysql_query($sql);
 	}
 	else
 	{
-		$sql = "UPDATE `file-manager`.`".$type."` SET `filename` = '".$name."' WHERE `".$type."`.`id` = ".$id.";";
+		$sql = "UPDATE `".$type."` SET `filename` = '".$name."' WHERE `".$type."`.`id` = ".$id.";";
 		mysql_query($sql);
 	}
 ?>

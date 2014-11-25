@@ -313,7 +313,6 @@
 			function addnewdir()
 			{
 				//var newname=prompt("新增資料夾命名為","新資料夾");
-
     			$("#Dialog").html("新增資料夾命名為<br/><input type='text' id='DialogText' value='新資料夾'/>");
 			    $("#Dialog").dialog({
 			    	dialogClass: "no-close",

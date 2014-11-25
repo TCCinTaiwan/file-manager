@@ -48,37 +48,37 @@
 	{
 		$newpath.=((!preg_match('/\/$/', $newpath))?"/":"");
 	}
-	$result=mysql_query("SELECT * FROM `file-manager`.`dir` WHERE `dir`.`filename` = '".preg_split('/\//', $newpath)[count(preg_split('/\//', $newpath))-2]."/' AND `dir`.`path` = '".preg_replace('/[^\/]*\/$/', '', $newpath)."';");//
-	//echo "SELECT * FROM `file-manager`.`dir` WHERE `dir`.`filename` = '".preg_split('/\//', $newpath)[count(preg_split('/\//', $newpath))-2]."/' AND `dir`.`path` = '".preg_replace('/[^\/]*\/$/', '', $newpath,1)."';";
+	$result=mysql_query("SELECT * FROM `dir` WHERE `dir`.`filename` = '".preg_split('/\//', $newpath)[count(preg_split('/\//', $newpath))-2]."/' AND `dir`.`path` = '".preg_replace('/[^\/]*\/$/', '', $newpath)."';");//
+	//echo "SELECT * FROM `dir` WHERE `dir`.`filename` = '".preg_split('/\//', $newpath)[count(preg_split('/\//', $newpath))-2]."/' AND `dir`.`path` = '".preg_replace('/[^\/]*\/$/', '', $newpath,1)."';";
 	if ((mysql_num_rows($result)!=0) || ($newpath==''))
 	{
 		if ($type==='dir')
 		{
 			//已知Bug:移動到子資料夾
 			echo '!!!';
-			$sql = "UPDATE `file-manager`.`".$type."` SET `path` = '".$newpath."' WHERE `".$type."`.`id` = ".$id.";";
+			$sql = "UPDATE `".$type."` SET `path` = '".$newpath."' WHERE `".$type."`.`id` = ".$id.";";
 			mysql_query($sql);
 
 
-			$sql = "SELECT * FROM `file-manager`.`file` WHERE `file`.`path` LIKE \"".$path.$name."%\";";
+			$sql = "SELECT * FROM `file` WHERE `file`.`path` LIKE \"".$path.$name."%\";";
 		    $result = mysql_query($sql) or die('MySQL query error');
 		    while($row = mysql_fetch_array($result)){
 		        
-		        $sql = "UPDATE `file-manager`.`file` SET `path` = '".str_replace($path.$name, $newpath.$name, $row['path'])."' WHERE `file`.`id` = '".$row['id']."';";
+		        $sql = "UPDATE `file` SET `path` = '".str_replace($path.$name, $newpath.$name, $row['path'])."' WHERE `file`.`id` = '".$row['id']."';";
 		        mysql_query($sql);
 		    }
 
-		    $sql = "SELECT * FROM `file-manager`.`dir` WHERE `dir`.`path` LIKE \"".$path.$name."%\";";
+		    $sql = "SELECT * FROM `dir` WHERE `dir`.`path` LIKE \"".$path.$name."%\";";
 		    $result = mysql_query($sql) or die('MySQL query error');
 		    while($row = mysql_fetch_array($result)){
-		        $sql = "UPDATE `file-manager`.`dir` SET `path` = '".str_replace($path.$name, $newpath.$name, $row['path'])."' WHERE `dir`.`id` = '".$row['id']."';";
+		        $sql = "UPDATE `dir` SET `path` = '".str_replace($path.$name, $newpath.$name, $row['path'])."' WHERE `dir`.`id` = '".$row['id']."';";
 		        mysql_query($sql);
 		    }
 			
 		}
 		else
 		{
-			$sql = "UPDATE `file-manager`.`".$type."` SET `path` = '".$newpath."' WHERE `".$type."`.`id` = ".$id.";";
+			$sql = "UPDATE `".$type."` SET `path` = '".$newpath."' WHERE `".$type."`.`id` = ".$id.";";
 			mysql_query($sql);
 		}
 	}
