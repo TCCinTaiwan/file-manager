@@ -19,6 +19,7 @@
 		<!-- 主要-->
 		<script type="text/javascript">
 			var path='';
+			var move_path='';
 			try
 			{
 				var xhr = new XMLHttpRequest();
@@ -118,6 +119,25 @@
 						if (xhr.status == 200)
 						{ // 確認 status
 							var list = document.getElementById("file"); // 取得顯示位置
+							list.innerHTML = xhr.responseText;
+						}
+					}
+				};
+				xhr.send(fd);//開始傳資料給upload.php
+			}
+			function displayDirList(new_path)
+			{
+				var fd = new FormData();//要傳過去給upload.php的資料
+				move_path=new_path;
+				fd.append('path', new_path);
+				xhr.open('POST','list2.php',true);//傳資料給upload.php
+				xhr.onreadystatechange=function()
+				{
+					if (xhr.readyState == 4)
+					{ // 確認 readyState
+						if (xhr.status == 200)
+						{ // 確認 status
+							var list = document.getElementById("dirlist"); // 取得顯示位置
 							list.innerHTML = xhr.responseText;
 						}
 					}
@@ -261,7 +281,10 @@
 			function move_file()
 			{
 				//var new_path=prompt("移動"+(type==='file'?"檔案":"資料夾")+"到\n必須是已存在的路徑",path.replace(/\/$/, ""));
-				$("#Dialog").html("移動"+(type==='file'?"檔案":"資料夾")+"到<br/>必須是已存在的路徑<br/><input type='text' id='DialogText' value='"+path.replace(/\/$/, "")+"'/>");
+				
+				$("#Dialog").html("移動"+(type==='file'?"檔案":"資料夾")+"到<br/><div id='dirlist'></div>");
+				displayDirList(path);
+				//$("#Dialog").html("移動"+(type==='file'?"檔案":"資料夾")+"到<br/>必須是已存在的路徑<br/><input type='text' id='DialogText' value='"+path.replace(/\/$/, "")+"'/>");
 			    $("#Dialog").dialog({
 			    	dialogClass: "no-close",
 			        resizable: false,
@@ -272,16 +295,15 @@
 			        buttons: {
 			            "確定": function () {
 							$(this).dialog('close');
-							var new_path=$('#DialogText').val();
-							if  ((path+name)==new_path)
+							if  ((path+name)==move_path)
 							{
 								alert('不能移到自己');
 							} 
-							else if (new_path!=null)
+							else if (move_path!=null)
 							{
 								var fd_rename_file = new FormData();
 								fd_rename_file.append('path',path);
-								fd_rename_file.append('newpath',new_path);
+								fd_rename_file.append('newpath',move_path);
 								fd_rename_file.append('id',id);
 								fd_rename_file.append('name',name);
 								fd_rename_file.append('type',type);
