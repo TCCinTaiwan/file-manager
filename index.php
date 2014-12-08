@@ -205,7 +205,7 @@
 				document.getElementById("contextmenu").style.visibility="visible";
 				document.getElementById("contextmenu_download").style.color="#000000";
 			}
-			function delete_file()
+			function delete_file()//刪除檔案
 			{
 				if (confirm("刪除"+(type==='file'?"檔案":"資料夾")))
 				{
@@ -223,7 +223,7 @@
 					xhr2.send(fd_delete_file);
 				}
 			}
-			function download_file()
+			function download_file()//下載檔案
 			{
 				if (type==='file')
 				{
@@ -234,7 +234,7 @@
 					}
 				}
 			}
-			function rename_file()
+			function rename_file()//重新命名檔案
 			{
 				//var newname=prompt("重新命名"+(type==='file'?"檔案":"資料夾")+"為",name.replace(/\/$/, ""));
 				$("#Dialog").html("重新命名"+(type==='file'?"檔案":"資料夾")+"為<br/><input type='text' id='DialogText' value='"+name.replace(/\/$/, "")+"'/>");
@@ -278,61 +278,84 @@
 					}
 			    });
 			}
-			function move_file()
+			function move_file2()//移動檔案拖曳
+			{
+
+			}
+			function move_file(new_path)//移動檔案(右鍵)
 			{
 				//var new_path=prompt("移動"+(type==='file'?"檔案":"資料夾")+"到\n必須是已存在的路徑",path.replace(/\/$/, ""));
-				
-				$("#Dialog").html("移動"+(type==='file'?"檔案":"資料夾")+"到<br/><div id='dirlist'></div>");
-				displayDirList(path);
-				//$("#Dialog").html("移動"+(type==='file'?"檔案":"資料夾")+"到<br/>必須是已存在的路徑<br/><input type='text' id='DialogText' value='"+path.replace(/\/$/, "")+"'/>");
-			    $("#Dialog").dialog({
-			    	dialogClass: "no-close",
-			        resizable: false,
-			        modal: true,
-			        title: '移動'+(type==='file'?"檔案":"資料夾"),
-			        height: 250,
-			        width: 400,
-			        buttons: {
-			            "確定": function () {
-							$(this).dialog('close');
-							if  ((path+name)==move_path)
-							{
-								alert('不能移到自己');
-							} 
-							else if (move_path!=null)
-							{
-								var fd_rename_file = new FormData();
-								fd_rename_file.append('path',path);
-								fd_rename_file.append('newpath',move_path);
-								fd_rename_file.append('id',id);
-								fd_rename_file.append('name',name);
-								fd_rename_file.append('type',type);
-								xhr2.open('POST','move.php');
-								xhr2.onload = function() 
+				if (new_path==null)
+				{
+					$("#Dialog").html("移動"+(type==='file'?"檔案":"資料夾")+"到<br/><div id='dirlist'></div>");
+					displayDirList(path);
+					//$("#Dialog").html("移動"+(type==='file'?"檔案":"資料夾")+"到<br/>必須是已存在的路徑<br/><input type='text' id='DialogText' value='"+path.replace(/\/$/, "")+"'/>");
+				    $("#Dialog").dialog({
+				    	dialogClass: "no-close",
+				        resizable: false,
+				        modal: true,
+				        title: '移動'+(type==='file'?"檔案":"資料夾"),
+				        height: 250,
+				        width: 400,
+				        buttons: {
+				            "確定": function () {
+								$(this).dialog('close');
+								if  ((path+name)==move_path)
 								{
-									//完成
-									displayList(path);
-								};
-								xhr2.send(fd_rename_file);
-							}
-			            },
-			            "取消": function () {
-			                $(this).dialog('close');
-			                var newname= null;
-			            }
-			        },
-			        open: function() {
-						$("#Dialog").keypress(function(e) {
-							if (e.keyCode == $.ui.keyCode.ENTER) {
-								$(this).parent().find("button:eq(1)").trigger("click");
-							}
-						});
-					}
-			    });
+									alert('不能移到自己');
+								} 
+								else if (move_path!=null)
+								{
+									var fd_move_file = new FormData();
+									fd_move_file.append('path',path);
+									fd_move_file.append('newpath',move_path);
+									fd_move_file.append('id',id);
+									fd_move_file.append('name',name);
+									fd_move_file.append('type',type);
+									xhr2.open('POST','move.php');
+									xhr2.onload = function() 
+									{
+										//完成
+										displayList(path);
+									};
+									xhr2.send(fd_move_file);
+								}
+				            },
+				            "取消": function () {
+				                $(this).dialog('close');
+				                var newname= null;
+				            }
+				        },
+				        open: function() {
+							$("#Dialog").keypress(function(e) {
+								if (e.keyCode == $.ui.keyCode.ENTER) {
+									$(this).parent().find("button:eq(1)").trigger("click");
+								}
+							});
+						}
+				    });
+				}
+				else
+				{
+					var fd_move_file = new FormData();
+					fd_move_file.append('path',path);
+					fd_move_file.append('newpath',new_path);
+					fd_move_file.append('id',id);
+					fd_move_file.append('name',name);
+					fd_move_file.append('type',type);
+					xhr2.open('POST','move.php');
+					xhr2.onload = function() 
+					{
+						//完成
+						displayList(path);
+					};
+					xhr2.send(fd_move_file);
+				}
+				
 
 				
 			}
-			function addnewdir()
+			function new_dir()
 			{
 				//var newname=prompt("新增資料夾命名為","新資料夾");
     			$("#Dialog").html("新增資料夾命名為<br/><input type='text' id='DialogText' value='新資料夾'/>");
@@ -432,17 +455,29 @@
 	                }
 	            });
         	});
+
+			function drag_file(evt) {
+				type='file';
+				id=evt.target.title;
+				name=evt.target.innerText;
+			}
+			function drag_dir(evt) {
+				type='dir';
+				id=evt.target.title;
+				name=evt.target.innerText;
+			}
 		</script>
 	</head>
 	<body ondragover='cancelEvent(event);' ondrop='cancelEvent(event);'>
 		<div id="main" oncontextmenu='cancelEvent(event);'>
 			<div id="menu" oncontextmenu='cancelEvent(event);'>
 				<div onclick="displayList('')" oncontextmenu='cancelEvent(event);'><i class="fa fa-home"></i>回主目錄</div>
-				<div onclick="addnewdir()" oncontextmenu='cancelEvent(event);'><i class="fa fa-plus"></i>新增資料夾</div>
+				<div onclick="new_dir()" oncontextmenu='cancelEvent(event);'><i class="fa fa-plus"></i>新增資料夾</div>
 				<div onclick="$('#selectFile').click()" oncontextmenu='cancelEvent(event);'><i class="fa fa-upload"></i>上傳檔案</div>
+				<div onclick="" oncontextmenu='cancelEvent(event);' style="background-color:#cccccc"><i class="fa fa-trash"></i>垃圾桶</div>
 				<!-- <div>+新增空白檔案</div> -->
 			</div>
-			<div id="file" ondragover='dragOverHandler(event)' ondrop='dropHandler(event)' oncontextmenu='cancelEvent(event);'></div>
+			<div id="file" oncontextmenu='cancelEvent(event);'></div><!-- ondragover='dragOverHandler(event)' ondrop='dropHandler(event)' -->
 		</div>
 		<div id='contextmenu' oncontextmenu='cancelEvent(event);'>
 			<div id='contextmenu_delete' onclick='delete_file()' oncontextmenu='cancelEvent(event);'>刪除</div>
