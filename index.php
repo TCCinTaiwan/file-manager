@@ -130,7 +130,7 @@
 				var fd = new FormData();//要傳過去給upload.php的資料
 				move_path=new_path;
 				fd.append('path', new_path);
-				xhr.open('POST','list2.php',true);//傳資料給upload.php
+				xhr.open('POST','listDir.php',true);//傳資料給upload.php
 				xhr.onreadystatechange=function()
 				{
 					if (xhr.readyState == 4)
