@@ -2,13 +2,11 @@ File Manager System
 ====
 2014/11/20 參加資工系比賽 因此寫了這個
 MySQL+Php+JavaScript+CSS
-  2014-11-25
     改版內容:
-      拖曳
+      多檔案
     下版方向:
     值得改進:
       背景
-      多選
       線上編輯
       預覽
       UI還是太醜
