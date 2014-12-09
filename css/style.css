@@ -68,3 +68,10 @@ html, body {
     width: 85%;
     float: left;
 }
+
+.choose{
+    background-color: #CCCCCC;
+}
+.select{
+    background-color: #AAAAAA;
+}

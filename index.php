@@ -124,6 +124,7 @@
 					}
 				};
 				xhr.send(fd);//開始傳資料給upload.php
+				choose = [];
 			}
 			function displayDirList(new_path)
 			{
@@ -150,6 +151,7 @@
 		</script>
 		<!-- 右鍵選單 -->
 		<script type="text/javascript">
+			var choose = [];
 			try
 			{
 				var xhr2 = new XMLHttpRequest();
@@ -184,9 +186,7 @@
 				evt.preventDefault();
 				_x=evt.clientX;
 				_y=evt.clientY;
-				type='dir';
-				id=evt.target.title;
-				name=evt.target.innerText;
+				choose_dir(evt);
 				document.getElementById("contextmenu").style.left=_x+"px";
 				document.getElementById("contextmenu").style.top=_y+"px";
 				document.getElementById("contextmenu").style.visibility="visible";
@@ -197,9 +197,7 @@
 				evt.preventDefault();
 				_x=evt.clientX;
 				_y=evt.clientY;
-				type='file';
-				id=evt.target.title;
-				name=evt.target.innerText;
+				choose_file(evt);
 				document.getElementById("contextmenu").style.left=_x+"px";
 				document.getElementById("contextmenu").style.top=_y+"px";
 				document.getElementById("contextmenu").style.visibility="visible";
@@ -234,7 +232,7 @@
 					}
 				}
 			}
-			function rename_file()//重新命名檔案
+			function rename_file()//重新命名檔案(單一檔案)
 			{
 				//var newname=prompt("重新命名"+(type==='file'?"檔案":"資料夾")+"為",name.replace(/\/$/, ""));
 				$("#Dialog").html("重新命名"+(type==='file'?"檔案":"資料夾")+"為<br/><input type='text' id='DialogText' value='"+name.replace(/\/$/, "")+"'/>");
@@ -278,48 +276,48 @@
 					}
 			    });
 			}
-			function move_file2()//移動檔案拖曳
-			{
-
-			}
-			function move_file(new_path)//移動檔案(右鍵)
+			function move_file(new_path)//移動檔案(多檔案)
 			{
 				//var new_path=prompt("移動"+(type==='file'?"檔案":"資料夾")+"到\n必須是已存在的路徑",path.replace(/\/$/, ""));
 				if (new_path==null)
 				{
-					$("#Dialog").html("移動"+(type==='file'?"檔案":"資料夾")+"到<br/><div id='dirlist'></div>");
+					$("#Dialog").html("移動到<br/><div id='dirlist'></div>");
 					displayDirList(path);
 					//$("#Dialog").html("移動"+(type==='file'?"檔案":"資料夾")+"到<br/>必須是已存在的路徑<br/><input type='text' id='DialogText' value='"+path.replace(/\/$/, "")+"'/>");
 				    $("#Dialog").dialog({
 				    	dialogClass: "no-close",
 				        resizable: false,
 				        modal: true,
-				        title: '移動'+(type==='file'?"檔案":"資料夾"),
+				        title: '移動',
 				        height: 250,
 				        width: 400,
 				        buttons: {
 				            "確定": function () {
 								$(this).dialog('close');
-								if  ((path+name)==move_path)
+								var fd_move_file = new FormData();
+								fd_move_file.append('path',path);
+								fd_move_file.append('newpath',move_path);
+
+								for (i=0;i<choose.length;i++)
 								{
-									alert('不能移到自己');
-								} 
-								else if (move_path!=null)
-								{
-									var fd_move_file = new FormData();
-									fd_move_file.append('path',path);
-									fd_move_file.append('newpath',move_path);
-									fd_move_file.append('id',id);
-									fd_move_file.append('name',name);
-									fd_move_file.append('type',type);
-									xhr2.open('POST','move.php');
-									xhr2.onload = function() 
+									//choose[i][3].classList.remove('choose');
+									fd_move_file.append('id[]',choose[i][0]);
+									fd_move_file.append('name[]',choose[i][1]);
+									fd_move_file.append('type[]',choose[i][2]);
+									//判斷重複位置
+									if  ((path+choose[i][1])==new_path)
 									{
-										//完成
-										displayList(path);
-									};
-									xhr2.send(fd_move_file);
+										alert('不能移到自己');
+										return;
+									}
 								}
+								xhr2.open('POST','move.php');
+								xhr2.onload = function() 
+								{
+									//完成
+									displayList(path);
+								};
+								xhr2.send(fd_move_file);
 				            },
 				            "取消": function () {
 				                $(this).dialog('close');
@@ -337,12 +335,23 @@
 				}
 				else
 				{
+					var i;
 					var fd_move_file = new FormData();
 					fd_move_file.append('path',path);
 					fd_move_file.append('newpath',new_path);
-					fd_move_file.append('id',id);
-					fd_move_file.append('name',name);
-					fd_move_file.append('type',type);
+					for (i=0;i<choose.length;i++)
+					{
+						//choose[i][3].classList.remove('choose');
+						fd_move_file.append('id[]',choose[i][0]);
+						fd_move_file.append('name[]',choose[i][1]);
+						fd_move_file.append('type[]',choose[i][2]);
+						//判斷重複位置
+						if  ((path+choose[i][1])==new_path)
+						{
+							alert('不能移到自己');
+							return;
+						}
+					}
 					xhr2.open('POST','move.php');
 					xhr2.onload = function() 
 					{
@@ -350,9 +359,9 @@
 						displayList(path);
 					};
 					xhr2.send(fd_move_file);
+					choose = [];
 				}
 				
-
 				
 			}
 			function new_dir()
@@ -456,15 +465,142 @@
 	            });
         	});
 
-			function drag_file(evt) {
+			function choose_file(evt) {
 				type='file';
 				id=evt.target.title;
 				name=evt.target.innerText;
+				for (i=0;i<choose.length;i++)
+				{
+					choose[i][3].classList.remove("select");
+				}
+				if (!evt.target.classList.contains("choose"))
+				{
+					for (i=0;i<choose.length;i++)
+					{
+						choose[i][3].classList.remove("choose");
+					}
+					choose=[];
+					choose.push([evt.target.title,evt.target.innerText,'file',evt.target]);
+				}
+				evt.target.classList.add("select");
+				evt.target.classList.add("choose");
 			}
-			function drag_dir(evt) {
+			function choose_dir(evt) {
 				type='dir';
 				id=evt.target.title;
 				name=evt.target.innerText;
+				for (i=0;i<choose.length;i++)
+				{
+					choose[i][3].classList.remove("select");
+				}
+				if (!evt.target.classList.contains("choose"))
+				{
+					for (i=0;i<choose.length;i++)
+					{
+						choose[i][3].classList.remove("choose");
+					}
+					choose=[];
+					choose.push([evt.target.title,evt.target.innerText,'file',evt.target]);
+				}
+				evt.target.classList.add("select");
+				evt.target.classList.add("choose");
+			}
+
+			function select_file(evt) {
+				type='file';
+				id=evt.target.title;
+				name=evt.target.innerText;
+				if (evt.ctrlKey)
+				{
+					if (evt.target.classList.contains("choose"))
+					{
+						for (i=0;i<choose.length;i++)
+						{
+							if (choose[i][0]==evt.target.title)
+							{
+								if (choose[i][2]=='file')
+								{
+									choose.splice(i,1);//移除項目
+								}
+							}
+						}
+						evt.target.classList.remove("select");
+						evt.target.classList.remove("choose");
+					}
+					else
+					{
+						for (i=0;i<choose.length;i++)
+						{
+							choose[i][3].classList.remove("select");
+						}
+						evt.target.classList.add("select");
+						evt.target.classList.add("choose");
+						choose.push([evt.target.title,evt.target.innerText,'file',evt.target]);
+					}
+				}
+				else
+				{
+					for (i=0;i<choose.length;i++)
+					{
+						choose[i][3].classList.remove("select");
+					}
+					for (i=0;i<choose.length;i++)
+					{
+						choose[i][3].classList.remove("choose");
+					}
+					choose=[];
+					choose.push([evt.target.title,evt.target.innerText,'dir',evt.target]);
+					evt.target.classList.add("select");
+					evt.target.classList.add("choose");
+				}
+			}
+			function select_dir(evt) {
+				type='dir';
+				id=evt.target.title;
+				name=evt.target.innerText;
+				if (evt.ctrlKey)
+				{
+					if (evt.target.classList.contains("choose"))
+					{
+						for (i=0;i<choose.length;i++)
+						{
+							if (choose[i][0]==evt.target.title)
+							{
+								if (choose[i][2]=='dir')
+								{
+									choose.splice(i,1);//移除項目
+								}
+							}
+						}
+						evt.target.classList.remove("select");
+						evt.target.classList.remove("choose");
+					}
+					else
+					{
+						for (i=0;i<choose.length;i++)
+						{
+							choose[i][3].classList.remove("select");
+						}
+						evt.target.classList.add("select");
+						evt.target.classList.add("choose");
+						choose.push([evt.target.title,evt.target.innerText,'dir',evt.target]);
+					}
+				}
+				else
+				{
+					for (i=0;i<choose.length;i++)
+					{
+						choose[i][3].classList.remove("select");
+					}
+					for (i=0;i<choose.length;i++)
+					{
+						choose[i][3].classList.remove("choose");
+					}
+					choose=[];
+					choose.push([evt.target.title,evt.target.innerText,'file',evt.target]);
+					evt.target.classList.add("select");
+					evt.target.classList.add("choose");
+				}
 			}
 		</script>
 	</head>

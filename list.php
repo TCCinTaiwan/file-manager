@@ -23,7 +23,7 @@
 		if ($row['path']==$path)
 		{
 			//preg_match('/\/$/',$row['filename'])//資料夾
-			echo "<div class='dir' title='".$row['id']."' oncontextmenu='dir_contextmenu(event)' draggable='true' ondragstart='drag_dir(event)' ondrop='move_file(\"".$row['path'].$row['filename']."\")' ondragover='cancelEvent(event);' onclick='displayList(\"".$row['path'].$row['filename']."\");'><i class='fa fa-folder-open'></i>".$row['filename']."</div>";/////////////////////////////
+			echo "<div class='dir' title='".$row['id']."' oncontextmenu='dir_contextmenu(event)' draggable='true' ondragstart='choose_dir(event)' ondrop='move_file(\"".$row['path'].$row['filename']."\")' ondragover='cancelEvent(event);' onclick='select_dir(event)' ondblclick='displayList(\"".$row['path'].$row['filename']."\");'><i class='fa fa-folder-open'></i>".$row['filename']."</div>";/////////////////////////////
 		}
 	}
 	$sql = "SELECT * FROM `file`;";
@@ -32,7 +32,7 @@
 	{
 		if ($row['path']==$path)
 		{
-			echo "<div class='file' title='".$row['id']."' draggable='true' ondragstart='drag_file(event)' ondragover='drag_file2(event)' oncontextmenu='file_contextmenu(event)'><i class='fa fa-file'></i>".$row['filename']."</div>";
+			echo "<div id='file[]' class='file' title='".$row['id']."' draggable='true' ondragstart='choose_file(event)' onclick='select_file(event)' oncontextmenu='file_contextmenu(event)'><i class='fa fa-file'></i>".$row['filename']."</div>";
 		}
 	}
 ?>
