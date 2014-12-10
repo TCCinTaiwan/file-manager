@@ -289,8 +289,8 @@
 				        resizable: false,
 				        modal: true,
 				        title: '移動',
-				        height: 250,
-				        width: 400,
+				        height: 400,
+				        width: 600,
 				        buttons: {
 				            "確定": function () {
 								$(this).dialog('close');
@@ -411,7 +411,7 @@
 					}
 			    });
 			}
-			function cancelEvent(evt)//缺重複名稱判斷
+			function cancelEvent(evt)
 			{
 				evt.preventDefault();
 				//window.event.returnValue=false;
@@ -602,6 +602,19 @@
 					evt.target.classList.add("choose");
 				}
 			}
+
+			function select_all() {
+				choose=[];
+				var filelist=document.getElementById('file');
+				var i;
+    			for (i = 0;i < filelist.children.length;i++) {
+    				if (!filelist.children[i].classList.contains('up_dir'))
+    				{
+    					choose.push([filelist.children[i].title,filelist.children[i].innerText,filelist.children[i].classList.contains('file')?'file':'dir',filelist.children[i]]);
+    					filelist.children[i].classList.add("choose");
+    				}
+    			}
+			}
 		</script>
 	</head>
 	<body ondragover='cancelEvent(event);' ondrop='cancelEvent(event);'>
@@ -610,10 +623,10 @@
 				<div onclick="displayList('')" oncontextmenu='cancelEvent(event);'><i class="fa fa-home"></i>回主目錄</div>
 				<div onclick="new_dir()" oncontextmenu='cancelEvent(event);'><i class="fa fa-plus"></i>新增資料夾</div>
 				<div onclick="$('#selectFile').click()" oncontextmenu='cancelEvent(event);'><i class="fa fa-upload"></i>上傳檔案</div>
-				<div onclick="" oncontextmenu='cancelEvent(event);' style="background-color:#cccccc"><i class="fa fa-trash"></i>垃圾桶</div>
+				<div onclick="select_all()" oncontextmenu='cancelEvent(event);'><i class="fa fa-arrows-alt"></i>全選</div>
 				<!-- <div>+新增空白檔案</div> -->
 			</div>
-			<div id="file" oncontextmenu='cancelEvent(event);'></div><!-- ondragover='dragOverHandler(event)' ondrop='dropHandler(event)' -->
+			<div id='file' oncontextmenu='cancelEvent(event);'></div><!-- ondragover='dragOverHandler(event)' ondrop='dropHandler(event)' -->
 		</div>
 		<div id='contextmenu' oncontextmenu='cancelEvent(event);'>
 			<div id='contextmenu_delete' onclick='delete_file()' oncontextmenu='cancelEvent(event);'>刪除</div>
@@ -624,6 +637,5 @@
 		</div>
 		<input id="selectFile" type="file" multiple="multiple" data-id="fileUpload" style="display:none"/>
 		<div id="Dialog"></div><!-- 使用者輸入 -->
-
 	</body>
 </html>

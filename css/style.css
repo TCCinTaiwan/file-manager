@@ -16,7 +16,7 @@ html, body {
     float: left;
 }
 #menu *, #file * {
-    vertical-align: top;
+    vertical-align: middle;
     text-align: left;
     cursor: default;
 }
@@ -74,4 +74,7 @@ html, body {
 }
 .select{
     background-color: #AAAAAA;
+}
+#menu div i{
+    padding: 0 10px;
 }

@@ -32,7 +32,7 @@
 	{
 		if ($row['path']==$path)
 		{
-			echo "<div id='file[]' class='file' title='".$row['id']."' draggable='true' ondragstart='choose_file(event)' onclick='select_file(event)' oncontextmenu='file_contextmenu(event)'><i class='fa fa-file'></i>".$row['filename']."</div>";
+			echo "<div class='file' title='".$row['id']."' draggable='true' ondragstart='choose_file(event)' onclick='select_file(event)' oncontextmenu='file_contextmenu(event)'><i class='fa fa-file'></i>".$row['filename']."</div>";
 		}
 	}
 ?>
