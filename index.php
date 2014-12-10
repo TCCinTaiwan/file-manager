@@ -209,10 +209,13 @@
 				{
 					var fd_delete_file = new FormData();
 					fd_delete_file.append('path', path);
-					fd_delete_file.append('id', id);
-					fd_delete_file.append('type', type);
-					fd_delete_file.append('name', name);
-					xhr2.open('POST','del.php');
+					for (i=0;i<choose.length;i++)
+					{
+						fd_delete_file.append('id[]',choose[i][0]);
+						fd_delete_file.append('name[]',choose[i][1]);
+						fd_delete_file.append('type[]',choose[i][2]);
+					}
+					xhr2.open('POST','del_multiple.php');
 					xhr2.onload = function() 
 					{
 						//完成
@@ -228,7 +231,6 @@
 					if (confirm("下載檔案?"))
 					{
 						window.open('download.php?id='+id+'&name='+name);
- 						//newwin.location= ;
 					}
 				}
 			}
@@ -256,7 +258,6 @@
 							xhr2.open('POST','rename.php');
 							xhr2.onload = function() 
 							{
-								//完成
 								displayList(path);
 							};
 							xhr2.send(fd_rename_file);
@@ -314,7 +315,6 @@
 								xhr2.open('POST','move.php');
 								xhr2.onload = function() 
 								{
-									//完成
 									displayList(path);
 								};
 								xhr2.send(fd_move_file);
@@ -355,7 +355,6 @@
 					xhr2.open('POST','move.php');
 					xhr2.onload = function() 
 					{
-						//完成
 						displayList(path);
 					};
 					xhr2.send(fd_move_file);
@@ -391,7 +390,6 @@
 								xhr2.open('POST','add_dir.php');//add_dir.php
 								xhr2.onload = function() 
 								{
-									//完成
 									displayList(path);
 								};
 								xhr2.send(fd_addnewdir);
@@ -457,7 +455,6 @@
 						xhr_upload.open('POST','upload.php');//傳資料給upload.php
 						xhr_upload.onload = function() 
 						{
-							//上傳完成
 							displayList(path);
 						};
 						xhr_upload.send(fd_upload);//開始上傳
@@ -591,9 +588,6 @@
 					for (i=0;i<choose.length;i++)
 					{
 						choose[i][3].classList.remove("select");
-					}
-					for (i=0;i<choose.length;i++)
-					{
 						choose[i][3].classList.remove("choose");
 					}
 					choose=[];
@@ -615,6 +609,32 @@
     				}
     			}
 			}
+			function select_reverse() {
+				var filelist=document.getElementById('file');
+				var i;
+    			for (i = 0;i < filelist.children.length;i++) {
+    				if (!filelist.children[i].classList.contains('up_dir'))
+    				{
+    					if (filelist.children[i].classList.contains('choose'))
+    					{
+    						for (j=0;j<choose.length;j++)
+							{
+								if (choose[j][3]==filelist.children[i])
+								{
+									choose.splice(j,1);//移除項目
+								}
+							}
+							filelist.children[i].classList.remove("select");
+							filelist.children[i].classList.remove("choose");
+    					}
+    					else
+    					{
+    						choose.push([filelist.children[i].title,filelist.children[i].innerText,filelist.children[i].classList.contains('file')?'file':'dir',filelist.children[i]]);
+    						filelist.children[i].classList.add("choose");
+    					}
+    				}
+    			}
+			}
 		</script>
 	</head>
 	<body ondragover='cancelEvent(event);' ondrop='cancelEvent(event);'>
@@ -624,6 +644,7 @@
 				<div onclick="new_dir()" oncontextmenu='cancelEvent(event);'><i class="fa fa-plus"></i>新增資料夾</div>
 				<div onclick="$('#selectFile').click()" oncontextmenu='cancelEvent(event);'><i class="fa fa-upload"></i>上傳檔案</div>
 				<div onclick="select_all()" oncontextmenu='cancelEvent(event);'><i class="fa fa-arrows-alt"></i>全選</div>
+				<div onclick="select_reverse()" oncontextmenu='cancelEvent(event);'><i class="fa fa-arrows-alt"></i>反向選取</div>
 				<!-- <div>+新增空白檔案</div> -->
 			</div>
 			<div id='file' oncontextmenu='cancelEvent(event);'></div><!-- ondragover='dragOverHandler(event)' ondrop='dropHandler(event)' -->
