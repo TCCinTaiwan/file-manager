@@ -644,6 +644,22 @@
     			}
 			}
 		</script>
+		<script type="text/javascript">
+
+			function keyFunction() {
+				if ((event.ctrlKey) && (event.keyCode!=17)) {
+					switch(event.keyCode){
+						case 65://Ctrl+A
+							select_all();
+							return false;
+							break;
+						default:
+					}
+				}
+			}
+			document.onkeydown=keyFunction;
+
+		</script>
 	</head>
 	<body ondragover='cancelEvent(event);' ondrop='cancelEvent(event);'>
 		<div id="main" oncontextmenu='cancelEvent(event);'>
@@ -651,7 +667,7 @@
 				<div onclick="displayList('')" oncontextmenu='cancelEvent(event);'><i class="fa fa-home"></i>回主目錄</div>
 				<div onclick="new_dir()" oncontextmenu='cancelEvent(event);'><i class="fa fa-plus"></i>新增資料夾</div>
 				<div onclick="$('#selectFile').click()" oncontextmenu='cancelEvent(event);'><i class="fa fa-upload"></i>上傳檔案</div>
-				<div onclick="select_all()" oncontextmenu='cancelEvent(event);'><i class="fa fa-arrows-alt"></i>全選</div>
+				<div onclick="select_all()" oncontextmenu='cancelEvent(event);'><i class="fa fa-arrows-alt"></i>全選(Ctrl+A)</div>
 				<div onclick="select_reverse()" oncontextmenu='cancelEvent(event);'><i class="fa fa-arrows-alt"></i>反向選取</div>
 				<!-- <div>+新增空白檔案</div> -->
 			</div>
