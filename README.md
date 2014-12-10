@@ -8,6 +8,7 @@ MySQL+Php+JavaScript+CSS
         預覽
         擴充資料庫欄位(檔案資訊、設定主目錄)
     值得改進:
+      多選-shift
       背景
       線上編輯
       UI還是太醜
