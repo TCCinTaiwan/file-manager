@@ -226,13 +226,21 @@
 			}
 			function download_file()//下載檔案
 			{
-				if (type==='file')
+				for (i=0;i<choose.length;i++)
 				{
-					if (confirm("下載檔案?"))
+					if (choose[i][2]==='file')
 					{
-						window.open('download.php?id='+id+'&name='+name);
+						if (confirm("下載 \""+choose[i][1]+"\"?"))
+						{
+							window.open('download.php?id='+choose[i][0]+'&name='+choose[i][1]);
+						}
+					}
+					else
+					{
+						//資料夾下載
 					}
 				}
+				
 			}
 			function rename_file()//重新命名檔案(單一檔案)
 			{
