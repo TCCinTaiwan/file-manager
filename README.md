@@ -19,4 +19,3 @@ MySQL+Php+JavaScript+CSS
       使用提示
     可參考:
       俊煌 http://203.64.91.82/csie/admin_folder/file/index/private.html
-刪除檔案功能
