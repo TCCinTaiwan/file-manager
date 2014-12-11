@@ -215,7 +215,7 @@
 						fd_delete_file.append('name[]',choose[i][1]);
 						fd_delete_file.append('type[]',choose[i][2]);
 					}
-					xhr2.open('POST','del_multiple.php');
+					xhr2.open('POST','del.php');
 					xhr2.onload = function() 
 					{
 						//完成
