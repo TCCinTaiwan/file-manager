@@ -9,15 +9,15 @@
 		$path='';
 	}
 	include_once('connect.php');
-	mysql_query("ALTER TABLE file AUTO_INCREMENT = 1;");//檔案編號歸1
-	mysql_query("ALTER TABLE dir AUTO_INCREMENT = 1;");//資料夾編號歸1
+	mysqli_query($conn, "ALTER TABLE file AUTO_INCREMENT = 1;");//檔案編號歸1
+	mysqli_query($conn, "ALTER TABLE dir AUTO_INCREMENT = 1;");//資料夾編號歸1
 	if ($path!='')//假如不是ROOT增加返回上一層選項
 	{
 		echo "<div class='up_dir' onclick='displayDirList(\"".preg_replace('/[^\/]*\/$/', '', $path)."\");' oncontextmenu='cencel_event(event);'><i class='fa fa-arrow-up'></i>../</div>";
 	}
 	$sql = "SELECT * FROM `dir`;";
-	$result = mysql_query($sql) or die('MySQL query error');
-	while($row = mysql_fetch_array($result))
+	$result = mysqli_query($conn, $sql) or die('MySQL query error');
+	while($row = mysqli_fetch_array($result))
 	{
 		if ($row['path']==$path)
 		{

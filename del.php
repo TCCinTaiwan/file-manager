@@ -37,22 +37,22 @@
 	for ($i=0;$i<count($name);$i++)
 	{
 		$sql = "DELETE FROM `file-manager`.`".$type[$i]."` WHERE `".$type[$i]."`.`id` = ".$id[$i].";";
-		mysql_query($sql);
+		mysqli_query($conn, $sql);
 		if ($type[$i]==='dir')
 		{
 			//$sql = "SELECT FROM `file-manager`.`file` WHERE `file`.`path` = ".$path.$name.";";
 			echo $path.$name[$i];
 			//這邊要把資料夾內的檔案刪掉
 			$sql = "SELECT * FROM `file-manager`.`file` WHERE `file`.`path` LIKE \"".$path.$name[$i]."%\";";
-		    $result = mysql_query($sql) or die('MySQL query error');
-		    while($row = mysql_fetch_array($result)){
+		    $result = mysqli_query($conn, $sql) or die('MySQL query error');
+		    while($row = mysqli_fetch_array($result)){
 		        unlink($uploads_dir.$row['id']);
 		    }
 	        $sql = "DELETE FROM `file-manager`.`file` WHERE `file`.`path` LIKE \"".$path.$name[$i]."%\";";
-	        mysql_query($sql);
+	        mysqli_query($conn, $sql);
 
 			$sql = "DELETE FROM `file-manager`.`dir` WHERE `dir`.`path` LIKE \"".$path.$name[$i]."%\";";
-			mysql_query($sql);
+			mysqli_query($conn, $sql);
 		}
 		else
 		{

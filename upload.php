@@ -15,10 +15,10 @@
 		{
 			$tmp_name = $_FILES["files"]["tmp_name"][$key];
 			$name = $_FILES["files"]["name"][$key];
-			//print_r(mysql_fetch_array(mysql_query("SELECT `AUTO_INCREMENT`FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'file-manager'AND TABLE_NAME = 'file';")));
-			move_uploaded_file($tmp_name, "$uploads_dir".mysql_fetch_array(mysql_query("SELECT `AUTO_INCREMENT`FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'file-manager'AND TABLE_NAME = 'file';"))[0]);
+			//print_r(mysqli_fetch_array(mysqli_query($conn, "SELECT `AUTO_INCREMENT`FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'file-manager'AND TABLE_NAME = 'file';")));
+			move_uploaded_file($tmp_name, "$uploads_dir".mysqli_fetch_array(mysqli_query($conn, "SELECT `AUTO_INCREMENT`FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'file-manager'AND TABLE_NAME = 'file';"))[0]);
 			$sql = "INSERT INTO `file` (`id`, `filename`, `path`) VALUES (NULL, '".$name."', '".$path."');";
-			mysql_query($sql);
+			mysqli_query($conn, $sql);
 		}
 	}
 ?>

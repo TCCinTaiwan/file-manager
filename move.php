@@ -49,9 +49,9 @@
 	{
 		$newpath.=((!preg_match('/\/$/', $newpath))?"/":"");
 	}
-	$result=mysql_query("SELECT * FROM `dir` WHERE `dir`.`filename` = '".preg_split('/\//', $newpath)[count(preg_split('/\//', $newpath))-2]."/' AND `dir`.`path` = '".preg_replace('/[^\/]*\/$/', '', $newpath)."';");//
+	$result=mysqli_query($conn, "SELECT * FROM `dir` WHERE `dir`.`filename` = '".preg_split('/\//', $newpath)[count(preg_split('/\//', $newpath))-2]."/' AND `dir`.`path` = '".preg_replace('/[^\/]*\/$/', '', $newpath)."';");//
 	//echo "SELECT * FROM `dir` WHERE `dir`.`filename` = '".preg_split('/\//', $newpath)[count(preg_split('/\//', $newpath))-2]."/' AND `dir`.`path` = '".preg_replace('/[^\/]*\/$/', '', $newpath,1)."';";
-	if ((mysql_num_rows($result)!=0) || ($newpath==''))
+	if ((mysqli_num_rows($result)!=0) || ($newpath==''))
 	{
 		for ($i=0;$i<count($name);$i++)
 		{
@@ -60,29 +60,29 @@
 				//已知Bug:移動到子資料夾
 				echo '!!!';
 				$sql = "UPDATE `".$type[$i]."` SET `path` = '".$newpath."' WHERE `".$type[$i]."`.`id` = ".$id[$i].";";
-				mysql_query($sql);
+				mysqli_query($conn, $sql);
 
 
 				$sql = "SELECT * FROM `file` WHERE `file`.`path` LIKE \"".$path.$name[$i]."%\";";
-			    $result = mysql_query($sql) or die('MySQL query error');
-			    while($row = mysql_fetch_array($result)){
+			    $result = mysqli_query($conn, $sql) or die('MySQL query error');
+			    while($row = mysqli_fetch_array($result)){
 			        
 			        $sql = "UPDATE `file` SET `path` = '".str_replace($path.$name[$i], $newpath.$name[$i], $row['path'])."' WHERE `file`.`id` = '".$row['id']."';";
-			        mysql_query($sql);
+			        mysqli_query($conn, $sql);
 			    }
 
 			    $sql = "SELECT * FROM `dir` WHERE `dir`.`path` LIKE \"".$path.$name[$i]."%\";";
-			    $result = mysql_query($sql) or die('MySQL query error');
-			    while($row = mysql_fetch_array($result)){
+			    $result = mysqli_query($conn, $sql) or die('MySQL query error');
+			    while($row = mysqli_fetch_array($result)){
 			        $sql = "UPDATE `dir` SET `path` = '".str_replace($path.$name[$i], $newpath.$name[$i], $row['path'])."' WHERE `dir`.`id` = '".$row['id']."';";
-			        mysql_query($sql);
+			        mysqli_query($conn, $sql);
 			    }
 				
 			}
 			else
 			{
 				$sql = "UPDATE `".$type[$i]."` SET `path` = '".$newpath."' WHERE `".$type[$i]."`.`id` = ".$id[$i].";";
-				mysql_query($sql);
+				mysqli_query($conn, $sql);
 			}
 		}
 	}

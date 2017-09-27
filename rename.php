@@ -47,31 +47,31 @@
 		//判斷假如結尾不是/自動加一個
 		$name.=((!preg_match('/\/$/', $name))?"/":"");
 		$sql = "UPDATE `".$type."` SET `filename` = '".$name."' WHERE `".$type."`.`id` = ".$id.";";
-		mysql_query($sql);
+		mysqli_query($conn, $sql);
 		//$sql = "SELECT FROM `file` WHERE `file`.`path` = ".$path.$name.";";
 		//這邊要把資料夾內的檔案所屬資料夾更改
 		
 		$sql = "SELECT * FROM `file` WHERE `file`.`path` LIKE \"".$path.$oldname."%\";";
-	    $result = mysql_query($sql) or die('MySQL query error');
-	    while($row = mysql_fetch_array($result)){
+	    $result = mysqli_query($conn, $sql) or die('MySQL query error');
+	    while($row = mysqli_fetch_array($result)){
 	        
 	        $sql = "UPDATE `file` SET `path` = '".str_replace($path.$oldname, $path.$name, $row['path'])."' WHERE `file`.`id` = '".$row['id']."';";
-	        mysql_query($sql);
+	        mysqli_query($conn, $sql);
 	    }
 
 	    $sql = "SELECT * FROM `dir` WHERE `dir`.`path` LIKE \"".$path.$oldname."%\";";
-	    $result = mysql_query($sql) or die('MySQL query error');
-	    while($row = mysql_fetch_array($result)){
+	    $result = mysqli_query($conn, $sql) or die('MySQL query error');
+	    while($row = mysqli_fetch_array($result)){
 	        $sql = "UPDATE `dir` SET `path` = '".str_replace($path.$oldname, $path.$name, $row['path'])."' WHERE `dir`.`id` = '".$row['id']."';";
-	        mysql_query($sql);
+	        mysqli_query($conn, $sql);
 	    }
 
 		// $sql = "UPDATE `dir` SET `path` = '".$path.$name."' WHERE `dir`.`path` = '".$path.$oldname."';";
-		// mysql_query($sql);
+		// mysqli_query($conn, $sql);
 	}
 	else
 	{
 		$sql = "UPDATE `".$type."` SET `filename` = '".$name."' WHERE `".$type."`.`id` = ".$id.";";
-		mysql_query($sql);
+		mysqli_query($conn, $sql);
 	}
 ?>
